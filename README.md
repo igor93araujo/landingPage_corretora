@@ -1,105 +1,142 @@
-# Landing Page - Imobiliária Excelência
+# 🏢 REIBACK Corretora de Seguros
 
-Uma landing page moderna e responsiva para corretora de imóveis, desenvolvida com HTML, CSS e JavaScript puro.
+Landing page profissional para a REIBACK Corretora de Seguros, desenvolvida com tecnologias modernas e design responsivo.
 
-## 🏠 Sobre o Projeto
+## 🌟 Sobre o Projeto
 
-Esta landing page foi criada para demonstrar os serviços de uma corretora de imóveis fictícia chamada "Imobiliária Excelência". O projeto inclui todas as seções solicitadas:
+A REIBACK Corretora de Seguros é uma empresa especializada em oferecer soluções personalizadas de seguros, consórcios, previdência privada e planos de saúde. Esta landing page foi desenvolvida para apresentar os serviços da empresa de forma profissional e atrativa.
 
-- **Home**: Seção hero com chamada principal
-- **Sobre Nós**: Informações sobre a empresa, história e estatísticas
-- **Institucional**: Dados sobre certificações e credibilidade
-- **Contato**: Informações de contato e link direto para WhatsApp
+## 🚀 Tecnologias Utilizadas
 
-## ✨ Características
+- **HTML5** - Estrutura semântica
+- **CSS3** - Estilização moderna com Flexbox e Grid
+- **JavaScript** - Interatividade e funcionalidades
+- **Font Awesome** - Ícones profissionais
+- **Responsive Design** - Adaptável a todos os dispositivos
 
-- **Design Responsivo**: Funciona perfeitamente em dispositivos móveis e desktop
-- **Navegação Suave**: Scroll suave entre seções
-- **Menu Mobile**: Menu hambúrguer para dispositivos móveis
-- **Animações**: Efeitos de entrada e hover para melhor experiência do usuário
-- **Ícones**: Utiliza Font Awesome para ícones profissionais
-- **Gradientes Modernos**: Design com cores atrativas e gradientes
-- **Performance**: Código otimizado e leve
+## ✨ Funcionalidades
 
-## 🚀 Como Usar
+### 🎯 Seções Principais
+- **Hero Section** - Apresentação impactante com logo da empresa
+- **Sobre Nós** - História, missão e valores da REIBACK
+- **Institucional** - Serviços oferecidos (veículos, frotas, seguros gerais)
+- **Contato** - Informações de contato e WhatsApp
+- **Footer** - Links rápidos e redes sociais
 
-1. **Clone ou baixe** os arquivos para sua máquina
-2. **Abra o arquivo** `index.html` em qualquer navegador moderno
-3. **Personalize** o conteúdo conforme necessário:
-   - Edite textos no arquivo `index.html`
-   - Modifique cores e estilos no arquivo `styles.css`
-   - Ajuste funcionalidades no arquivo `script.js`
+### 📱 Recursos Responsivos
+- Design mobile-first
+- Menu hamburger para dispositivos móveis
+- Layout adaptativo para todas as telas
+- Otimização para diferentes resoluções
 
-## 📁 Estrutura dos Arquivos
+### 🎨 Design e UX
+- Paleta de cores da identidade visual da REIBACK
+- Gradientes elegantes e efeitos visuais
+- Animações suaves e transições
+- Tipografia profissional e legível
+
+## 🏗️ Estrutura do Projeto
 
 ```
-landing-page-imobiliaria/
-├── index.html          # Estrutura HTML principal
+landingPage_corretora/
+├── index.html          # Página principal
 ├── styles.css          # Estilos CSS
 ├── script.js           # Funcionalidades JavaScript
-└── README.md           # Este arquivo
+├── assets/             # Imagens e recursos
+│   ├── logo_coroa.png      # Logo do header
+│   └── no_bg_logo.png      # Logo do hero section
+├── README.md           # Este arquivo
+└── .git/               # Controle de versão Git
 ```
 
-## 🎨 Personalização
+## 🚀 Como Executar
 
-### Cores Principais
-- **Azul**: #3498db (links e elementos principais)
-- **Vermelho**: #e74c3c (botões de ação)
-- **Verde**: #27ae60 (WhatsApp e elementos de sucesso)
-- **Cinza Escuro**: #2c3e50 (textos e fundos)
+### Pré-requisitos
+- Navegador web moderno
+- Servidor local (opcional)
 
-### Fontes
-- **Família**: Segoe UI, Tahoma, Geneva, Verdana, sans-serif
-- **Tamanhos**: Responsivos com breakpoints para mobile
+### Execução Local
+1. Clone o repositório:
+```bash
+git clone https://github.com/igor93araujo/landingPage_corretora.git
+```
 
-### Ícones
-- Utiliza Font Awesome 6.0.0
-- Ícones incluídos via CDN
+2. Navegue até a pasta:
+```bash
+cd landingPage_corretora
+```
+
+3. Abra o arquivo `index.html` no navegador
+
+### Deploy na Vercel
+- **URL**: [reiback-seguros.vercel.app](https://reiback-seguros.vercel.app)
+- **Deploy automático** a cada push no GitHub
+- **SSL gratuito** incluído
 
 ## 📱 Responsividade
 
-A página é totalmente responsiva com breakpoints em:
-- **Desktop**: > 768px
-- **Tablet**: ≤ 768px  
-- **Mobile**: ≤ 480px
+O site é totalmente responsivo e funciona perfeitamente em:
+- 📱 **Mobile** (320px - 480px)
+- 📱 **Tablet** (481px - 768px)
+- 💻 **Desktop** (769px+)
 
-## 🔧 Funcionalidades JavaScript
+## 🎨 Paleta de Cores
 
-- **Menu Mobile**: Toggle do menu hambúrguer
-- **Scroll Suave**: Navegação suave entre seções
-- **Header Dinâmico**: Transparência e sombra baseada no scroll
-- **Animações**: Elementos aparecem com animação ao entrar na tela
-- **Contadores Animados**: Estatísticas com contagem progressiva
-- **Navegação Ativa**: Destaque da seção atual no menu
-- **Scroll to Top**: Botão para voltar ao topo (em telas grandes)
+Baseada na identidade visual da REIBACK:
+- **Azul Principal**: `#1e40af`
+- **Azul Secundário**: `#3b82f6`
+- **Azul Claro**: `#60a5fa`
+- **Cinza Escuro**: `#334155`
+- **Branco**: `#ffffff`
 
-## 📞 WhatsApp
+## 📞 Informações de Contato
 
-O link do WhatsApp está configurado para o número `(31) 99422-0001`. Para personalizar:
+- **Telefone**: (19) 99981-9643
+- **Email**: contato@reibackseguros.com
+- **Endereço**: Av José Pancetti, 729 - Campinas - SP
+- **Horário**: Segunda a Sexta: 8h às 18h | Sábado: 9h às 13h
 
-1. Edite o arquivo `index.html`
-2. Localize a linha: `<a href="https://wa.me/5531994220001"`
-3. Substitua `5531994220001` pelo número desejado (formato internacional)
+## 🌐 Redes Sociais
 
-## 🌐 Hospedagem
+- **Facebook**: [@reibackcampinas](https://www.facebook.com/reibackcampinas)
+- **Instagram**: [@reibackcampinas](https://www.instagram.com/reibackcampinas)
 
-Para hospedar a página:
-1. Faça upload dos arquivos para seu servidor web
-2. Ou use serviços como:
-   - GitHub Pages
-   - Netlify
-   - Vercel
-   - Hostinger
-   - GoDaddy
+## 🔧 Personalizações
 
-## 📝 Licença
+### Alterar Informações da Empresa
+- Edite o arquivo `index.html` para atualizar textos
+- Modifique `styles.css` para ajustar cores e estilos
+- Atualize `script.js` para funcionalidades específicas
 
-Este projeto é de uso livre para fins educacionais e comerciais.
+### Adicionar Novas Seções
+- Crie novas seções HTML seguindo o padrão existente
+- Adicione estilos CSS correspondentes
+- Implemente funcionalidades JavaScript se necessário
 
-## 🤝 Suporte
+## 📈 Melhorias Futuras
 
-Para dúvidas ou sugestões, sinta-se à vontade para entrar em contato.
+- [ ] Formulário de cotação online
+- [ ] Blog com dicas de seguros
+- [ ] Área de login para clientes
+- [ ] Chat online integrado
+- [ ] Sistema de newsletter
+- [ ] Integração com CRM
+
+## 🤝 Contribuição
+
+Este projeto foi desenvolvido especificamente para a REIBACK Corretora de Seguros. Para sugestões ou melhorias, entre em contato com a equipe de desenvolvimento.
+
+## 📄 Licença
+
+© 2024 REIBACK Corretora de Seguros. Todos os direitos reservados.
+
+## 👨‍💻 Desenvolvimento
+
+- **Desenvolvedor**: Igor Araújo
+- **Design**: Baseado na identidade visual da REIBACK
+- **Tecnologias**: HTML5, CSS3, JavaScript
+- **Deploy**: Vercel
 
 ---
 
-**Desenvolvido com ❤️ para demonstrar as melhores práticas de desenvolvimento web front-end.**
+**REIBACK Corretora de Seguros** - Montamos o seu seguro de acordo com o seu perfil! 🛡️
