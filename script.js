@@ -204,6 +204,12 @@ window.addEventListener("load", () => {
   setTimeout(() => {
     document.body.style.opacity = "1";
   }, 100);
+
+  // Atualiza ano do rodapé automaticamente
+  const yearEl = document.getElementById("current-year");
+  if (yearEl) {
+    yearEl.textContent = String(new Date().getFullYear());
+  }
 });
 
 // Função para scroll to top (opcional)

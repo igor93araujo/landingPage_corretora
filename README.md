@@ -17,6 +17,7 @@ A REIBACK Corretora de Seguros é uma empresa especializada em oferecer soluçõ
 ## ✨ Funcionalidades
 
 ### 🎯 Seções Principais
+
 - **Hero Section** - Apresentação impactante com logo da empresa
 - **Sobre Nós** - História, missão e valores da REIBACK
 - **Institucional** - Serviços oferecidos (veículos, frotas, seguros gerais)
@@ -24,12 +25,14 @@ A REIBACK Corretora de Seguros é uma empresa especializada em oferecer soluçõ
 - **Footer** - Links rápidos e redes sociais
 
 ### 📱 Recursos Responsivos
+
 - Design mobile-first
 - Menu hamburger para dispositivos móveis
 - Layout adaptativo para todas as telas
 - Otimização para diferentes resoluções
 
 ### 🎨 Design e UX
+
 - Paleta de cores da identidade visual da REIBACK
 - Gradientes elegantes e efeitos visuais
 - Animações suaves e transições
@@ -52,16 +55,20 @@ landingPage_corretora/
 ## 🚀 Como Executar
 
 ### Pré-requisitos
+
 - Navegador web moderno
 - Servidor local (opcional)
 
 ### Execução Local
+
 1. Clone o repositório:
+
 ```bash
 git clone https://github.com/igor93araujo/landingPage_corretora.git
 ```
 
 2. Navegue até a pasta:
+
 ```bash
 cd landingPage_corretora
 ```
@@ -69,6 +76,7 @@ cd landingPage_corretora
 3. Abra o arquivo `index.html` no navegador
 
 ### Deploy na Vercel
+
 - **URL**: [reiback-seguros.vercel.app](https://reiback-seguros.vercel.app)
 - **Deploy automático** a cada push no GitHub
 - **SSL gratuito** incluído
@@ -76,6 +84,7 @@ cd landingPage_corretora
 ## 📱 Responsividade
 
 O site é totalmente responsivo e funciona perfeitamente em:
+
 - 📱 **Mobile** (320px - 480px)
 - 📱 **Tablet** (481px - 768px)
 - 💻 **Desktop** (769px+)
@@ -83,6 +92,7 @@ O site é totalmente responsivo e funciona perfeitamente em:
 ## 🎨 Paleta de Cores
 
 Baseada na identidade visual da REIBACK:
+
 - **Azul Principal**: `#1e40af`
 - **Azul Secundário**: `#3b82f6`
 - **Azul Claro**: `#60a5fa`
@@ -104,11 +114,13 @@ Baseada na identidade visual da REIBACK:
 ## 🔧 Personalizações
 
 ### Alterar Informações da Empresa
+
 - Edite o arquivo `index.html` para atualizar textos
 - Modifique `styles.css` para ajustar cores e estilos
 - Atualize `script.js` para funcionalidades específicas
 
 ### Adicionar Novas Seções
+
 - Crie novas seções HTML seguindo o padrão existente
 - Adicione estilos CSS correspondentes
 - Implemente funcionalidades JavaScript se necessário
@@ -128,7 +140,7 @@ Este projeto foi desenvolvido especificamente para a REIBACK Corretora de Seguro
 
 ## 📄 Licença
 
-© 2024 REIBACK Corretora de Seguros. Todos os direitos reservados.
+© 2025 REIBACK Corretora de Seguros. Todos os direitos reservados.
 
 ## 👨‍💻 Desenvolvimento
 
