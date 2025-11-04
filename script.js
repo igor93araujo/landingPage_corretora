@@ -313,106 +313,49 @@ document.addEventListener("DOMContentLoaded", updateWhatsAppFloatingStyle);
  * 7. Substitua os valores abaixo:
  */
 async function fetchGoogleReviews() {
-  // As configurações estão no arquivo config.js
-  // Edite config.js para alterar suas credenciais
-
-  // Verificar se config.js foi carregado
-  if (typeof GOOGLE_CONFIG === "undefined") {
-    console.log(
-      "⚠️ Arquivo config.js não encontrado. Crie o arquivo config.js com suas credenciais."
-    );
-    return { reviews: null, error: null, isConfigured: false };
+  // Verificar se config.js foi carregado e está configurado
+  if (
+    typeof GOOGLE_CONFIG === "undefined" ||
+    !GOOGLE_CONFIG.API_KEY ||
+    !GOOGLE_CONFIG.PLACE_ID
+  ) {
+    return { reviews: null, error: "API não configurada" };
   }
-
-  // Verificar se está configurado usando a função do config.js
-  const isConfigValid =
-    typeof isConfigured === "function"
-      ? isConfigured()
-      : GOOGLE_CONFIG.API_KEY &&
-        GOOGLE_CONFIG.API_KEY !== "" &&
-        GOOGLE_CONFIG.PLACE_ID &&
-        GOOGLE_CONFIG.PLACE_ID !== "";
-
-  if (!isConfigValid) {
-    console.log(
-      "⚠️ Google Places API não configurada. Edite config.js e configure suas credenciais."
-    );
-    return { reviews: null, error: null, isConfigured: false };
-  }
-
-  const API_KEY = GOOGLE_CONFIG.API_KEY;
-  const PLACE_ID = GOOGLE_CONFIG.PLACE_ID;
 
   try {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews&key=${API_KEY}`
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${GOOGLE_CONFIG.PLACE_ID}&fields=name,rating,reviews&key=${GOOGLE_CONFIG.API_KEY}`
     );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
 
     const data = await response.json();
 
-    if (data.status === "OK" && data.result && data.result.reviews) {
-      // Mapear reviews do Google para o formato esperado
-      const reviews = data.result.reviews.slice(0, 10).map((review) => {
-        // Extrair primeira letra do nome para o avatar
-        const initial = review.author_name
-          ? review.author_name.charAt(0).toUpperCase()
-          : "?";
-
-        // Formatar data
-        const date = review.time
-          ? new Date(review.time * 1000).toLocaleDateString("pt-BR", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })
-          : "Data não disponível";
-
-        return {
+    if (data.status === "OK" && data.result?.reviews?.length > 0) {
+      const reviews = data.result.reviews
+        .map((review) => ({
           name: review.author_name || "Anônimo",
-          rating: review.rating || 5,
+          rating: review.rating,
           text: review.text || "Avaliação sem texto",
-          date: date,
-          initial: initial,
+          date: review.time
+            ? new Date(review.time * 1000).toLocaleDateString("pt-BR", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })
+            : "Data não disponível",
+          initial: review.author_name
+            ? review.author_name.charAt(0).toUpperCase()
+            : "?",
           photo: review.profile_photo_url || null,
-        };
-      });
+        }))
+        .filter((review) => review.rating >= 3)
+        .slice(0, 10);
 
-      return { reviews, error: null, isConfigured: true };
-    } else if (data.status === "REQUEST_DENIED") {
-      console.error("❌ Erro de autenticação. Verifique sua API Key.");
-      return {
-        reviews: null,
-        error: "Erro de autenticação. Verifique sua API Key.",
-        isConfigured: true,
-      };
-    } else if (data.status === "INVALID_REQUEST") {
-      console.error(
-        "❌ Place ID inválido. Verifique o Place ID do seu negócio."
-      );
-      return {
-        reviews: null,
-        error: "Place ID inválido. Verifique o Place ID do seu negócio.",
-        isConfigured: true,
-      };
-    } else {
-      console.warn("⚠️ Nenhuma avaliação encontrada ou status:", data.status);
-      return {
-        reviews: null,
-        error: "Não foi possível carregar avaliações do Google.",
-        isConfigured: true,
-      };
+      return { reviews, error: null };
     }
+
+    return { reviews: null, error: "Não foi possível carregar avaliações" };
   } catch (error) {
-    console.error("❌ Erro ao buscar avaliações do Google:", error);
-    return {
-      reviews: null,
-      error: "Erro de conexão ao buscar avaliações do Google.",
-      isConfigured: true,
-    };
+    return { reviews: null, error: "Erro ao buscar avaliações" };
   }
 }
 
@@ -654,46 +597,18 @@ function hideGoogleErrorMessage() {
 
 // Inicializar carrossel quando a página carregar
 document.addEventListener("DOMContentLoaded", async () => {
-  // Ocultar mensagem de erro inicialmente
   hideGoogleErrorMessage();
 
-  // Tentar buscar reviews do Google
   const googleData = await fetchGoogleReviews();
-  let reviews = null;
-  let shouldShowError = false;
+  const reviews = googleData.reviews || exampleReviews;
 
-  if (googleData.isConfigured) {
-    // API está configurada, verificar se houve erro
-    if (googleData.error) {
-      // Houve erro ao buscar do Google
-      shouldShowError = true;
-      console.error("❌ Erro ao buscar do Google:", googleData.error);
-    } else if (googleData.reviews && googleData.reviews.length > 0) {
-      // Sucesso! Reviews do Google carregadas
-      reviews = googleData.reviews;
-      console.log("✅ Reviews do Google carregadas com sucesso!");
-    } else {
-      // Não há reviews ou nenhuma encontrada
-      shouldShowError = true;
-    }
+  // Mostrar mensagem de erro se não conseguiu buscar do Google
+  if (googleData.error || !googleData.reviews) {
+    showGoogleErrorMessage();
   }
 
-  // Se não conseguir buscar do Google ou houver erro, usar reviews de exemplo
-  if (!reviews) {
-    if (shouldShowError) {
-      // Mostrar mensagem de erro apenas se a API estiver configurada mas falhou
-      showGoogleErrorMessage();
-    }
-    console.log(
-      "📝 Usando reviews de exemplo. Configure a Google Places API para ver reviews reais."
-    );
-    reviews = exampleReviews;
-  }
-
-  // Inicializar carrossel com as reviews disponíveis
-  if (reviews && reviews.length > 0) {
+  // Inicializar carrossel
+  if (reviews.length > 0) {
     new ReviewsCarousel(reviews, "reviewsTrack");
-  } else {
-    console.error("❌ Nenhuma avaliação disponível");
   }
 });
