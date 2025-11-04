@@ -313,17 +313,35 @@ document.addEventListener("DOMContentLoaded", updateWhatsAppFloatingStyle);
  * 7. Substitua os valores abaixo:
  */
 async function fetchGoogleReviews() {
-  // ⚠️ CONFIGURE AQUI SUA API KEY E PLACE ID
-  const API_KEY = "AIzaSyA_6nS1XU6sXK8q-Kv68X_oXwZq78FjrkU"; // Substitua pela sua API Key
-  const PLACE_ID = "ChIJ898888888888888888888888888888888"; // Substitua pelo Place ID do seu negócio
+  // As configurações estão no arquivo config.js
+  // Edite config.js para alterar suas credenciais
 
-  // Se não estiver configurado, retorna objeto indicando que não está configurado
-  if (API_KEY === "SUA_API_KEY_AQUI" || PLACE_ID === "SEU_PLACE_ID_AQUI") {
+  // Verificar se config.js foi carregado
+  if (typeof GOOGLE_CONFIG === "undefined") {
     console.log(
-      "⚠️ Google Places API não configurada. Usando reviews de exemplo."
+      "⚠️ Arquivo config.js não encontrado. Crie o arquivo config.js com suas credenciais."
     );
     return { reviews: null, error: null, isConfigured: false };
   }
+
+  // Verificar se está configurado usando a função do config.js
+  const isConfigValid =
+    typeof isConfigured === "function"
+      ? isConfigured()
+      : GOOGLE_CONFIG.API_KEY &&
+        GOOGLE_CONFIG.API_KEY !== "" &&
+        GOOGLE_CONFIG.PLACE_ID &&
+        GOOGLE_CONFIG.PLACE_ID !== "";
+
+  if (!isConfigValid) {
+    console.log(
+      "⚠️ Google Places API não configurada. Edite config.js e configure suas credenciais."
+    );
+    return { reviews: null, error: null, isConfigured: false };
+  }
+
+  const API_KEY = GOOGLE_CONFIG.API_KEY;
+  const PLACE_ID = GOOGLE_CONFIG.PLACE_ID;
 
   try {
     const response = await fetch(
