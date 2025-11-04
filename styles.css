@@ -404,6 +404,367 @@ body {
   line-height: 1.6;
 }
 
+/* Avaliações Section */
+.avaliacoes {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #64748b;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reviews-carousel {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 80px; /* padding lateral para acomodar as setas */
+}
+
+.reviews-container {
+  overflow: hidden;
+  position: relative;
+  border-radius: 20px;
+  padding: 2rem 0;
+}
+
+.reviews-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  gap: 1.5rem;
+}
+
+.review-card {
+  flex: 0 0 calc((100% - 3rem) / 3); /* 3 cards por tela: (100% - 2 gaps de 1.5rem) / 3 */
+  padding: 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(30, 64, 175, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(30, 64, 175, 0.15);
+  border-color: #3b82f6;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.review-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.review-info {
+  flex: 1;
+}
+
+.review-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 0.25rem;
+}
+
+.review-date {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.review-rating {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.review-rating .star {
+  color: #fbbf24;
+  font-size: 1.2rem;
+}
+
+.review-rating .star.empty {
+  color: #e2e8f0;
+}
+
+.review-text {
+  color: #334155;
+  line-height: 1.8;
+  font-size: 1rem;
+  flex: 1;
+}
+
+.review-google-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 1rem;
+}
+
+.review-google-badge i {
+  color: #4285f4;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: 2px solid #e2e8f0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: #1e40af;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-btn:hover {
+  background: #1e40af;
+  color: white;
+  border-color: #1e40af;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(30, 64, 175, 0.3);
+}
+
+.carousel-btn-prev {
+  left: -25px;
+}
+
+.carousel-btn-next {
+  right: -25px;
+}
+
+.carousel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.carousel-btn:disabled:hover {
+  background: white;
+  color: #1e40af;
+  border-color: #e2e8f0;
+  transform: translateY(-50%);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.carousel-dot.active {
+  background: #1e40af;
+  width: 30px;
+  border-radius: 6px;
+}
+
+.carousel-dot:hover {
+  background: #3b82f6;
+}
+
+.google-reviews-link {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.btn-google-reviews {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 12px 30px;
+  background: white;
+  color: #1e40af;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid #1e40af;
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.1);
+}
+
+.btn-google-reviews:hover {
+  background: #1e40af;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(30, 64, 175, 0.2);
+}
+
+.btn-google-reviews i {
+  font-size: 1.2rem;
+}
+
+/* Mensagem de erro do Google */
+.google-error-message {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-message-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.error-message-content i {
+  font-size: 1.5rem;
+  color: #f59e0b;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.error-text {
+  flex: 1;
+}
+
+.error-text strong {
+  display: block;
+  color: #92400e;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.error-text p {
+  color: #78350f;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Responsividade para Mensagem de Erro */
+@media (max-width: 768px) {
+  .google-error-message {
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .error-message-content {
+    gap: 0.75rem;
+  }
+
+  .error-message-content i {
+    font-size: 1.3rem;
+  }
+
+  .error-text strong {
+    font-size: 1rem;
+  }
+
+  .error-text p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsividade para Avaliações */
+@media (max-width: 1024px) {
+  .reviews-carousel {
+    padding: 2rem 60px; /* menos padding para tablet */
+  }
+
+  .review-card {
+    flex: 0 0 calc((100% - 1.5rem) / 2); /* 2 por tela em tablet: (100% - 1 gap) / 2 */
+  }
+}
+
+@media (max-width: 768px) {
+  .reviews-carousel {
+    padding: 2rem 50px; /* menos padding para mobile */
+  }
+
+  .reviews-track {
+    gap: 1rem;
+  }
+
+  .review-card {
+    flex: 0 0 100%; /* 1 por tela no mobile */
+    padding: 1.5rem;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-btn-prev {
+    left: 10px;
+  }
+
+  .carousel-btn-next {
+    right: 10px;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+}
+
 /* Contato Section */
 .contato {
   padding: 5rem 0;
