@@ -571,6 +571,111 @@ const reviews = [
   },
 ];
 
+// Carrossel de Logos com pausa
+class LogosCarousel {
+  constructor() {
+    this.track = document.querySelector(".logos-carousel-track");
+    this.items = document.querySelectorAll(".logos-carousel-item");
+    this.container = document.querySelector(".logos-carousel-section");
+    this.isPaused = false;
+    this.intervalId = null;
+    this.pauseDuration = 1000; // 1 segundo de pausa
+    this.transitionDuration = 500; // 0.5 segundos de transição
+
+    if (this.track && this.items.length > 0) {
+      // Começar em um índice que já mostre logos visíveis (ex: 3 ou 4 logos)
+      // Isso evita espaço em branco à esquerda quando a página carrega
+      this.currentIndex = Math.min(3, this.items.length - 1);
+      this.init();
+    }
+  }
+
+  init() {
+    // Centralizar primeiro logo
+    this.updateCarousel();
+
+    // Pausar quando mouse estiver sobre
+    this.container.addEventListener("mouseenter", () => {
+      this.pause();
+    });
+
+    this.container.addEventListener("mouseleave", () => {
+      this.resume();
+    });
+
+    // Iniciar autoplay
+    this.start();
+  }
+
+  updateCarousel() {
+    if (!this.track || this.items.length === 0) return;
+
+    // Remover classe active de todos
+    this.items.forEach((item) => item.classList.remove("active"));
+
+    // Adicionar classe active no item atual
+    if (this.items[this.currentIndex]) {
+      this.items[this.currentIndex].classList.add("active");
+    }
+
+    // Aguardar um frame para o DOM atualizar (para pegar o tamanho correto após adicionar active)
+    requestAnimationFrame(() => {
+      // Calcular posição para centralizar o logo ativo
+      const containerWidth = this.container.offsetWidth;
+      const gap = window.innerWidth <= 768 ? 32 : 48; // 2rem mobile, 3rem desktop
+
+      // Calcular posição acumulada até o item atual
+      let totalWidth = 0;
+      for (let i = 0; i < this.currentIndex; i++) {
+        const item = this.items[i];
+        const itemWidth =
+          item.offsetWidth || (window.innerWidth <= 768 ? 120 : 150);
+        totalWidth += itemWidth + gap;
+      }
+
+      // Adicionar metade da largura do item ativo
+      const activeItem = this.items[this.currentIndex];
+      const activeWidth =
+        activeItem.offsetWidth || (window.innerWidth <= 768 ? 150 : 180);
+      totalWidth += activeWidth / 2;
+
+      // Centralizar
+      const scrollPosition = totalWidth - containerWidth / 2;
+
+      // Aplicar transform
+      this.track.style.transform = `translateX(${-scrollPosition}px)`;
+    });
+  }
+
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.items.length;
+    this.updateCarousel();
+  }
+
+  start() {
+    this.intervalId = setInterval(() => {
+      if (!this.isPaused) {
+        this.next();
+      }
+    }, this.pauseDuration + this.transitionDuration);
+  }
+
+  pause() {
+    this.isPaused = true;
+  }
+
+  resume() {
+    this.isPaused = false;
+  }
+
+  stop() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+  }
+}
+
 // Inicializar carrossel quando a página carregar
 document.addEventListener("DOMContentLoaded", () => {
   // Inicializar carrossel com reviews
@@ -579,4 +684,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("❌ Nenhuma review disponível");
   }
+
+  // Inicializar carrossel de logos
+  new LogosCarousel();
 });
