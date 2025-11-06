@@ -237,6 +237,60 @@ body {
   transform: scale(1.05);
 }
 
+/* Logos Carousel Section */
+.logos-carousel-section {
+  background: #f8fafc;
+  padding: 3rem 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.logos-carousel-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.logos-carousel-track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  animation: scroll-logos 15s linear infinite;
+  will-change: transform;
+}
+
+.logos-carousel-item {
+  flex-shrink: 0;
+  width: 150px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.logos-carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.logos-carousel-item:hover img {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+@keyframes scroll-logos {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 /* Seções gerais */
 .section-title {
   text-align: center;
@@ -1062,6 +1116,20 @@ body {
 
   .institucional-content {
     grid-template-columns: 1fr;
+  }
+
+  .logos-carousel-section {
+    padding: 2rem 0;
+  }
+
+  .logos-carousel-item {
+    width: 120px;
+    height: 60px;
+  }
+
+  .logos-carousel-track {
+    gap: 2rem;
+    animation-duration: 40s;
   }
 
   .footer-content {
