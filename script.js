@@ -343,27 +343,35 @@ function createReviewCard(review, index) {
 class ReviewsCarousel {
   constructor(reviews, containerId) {
     this.reviews = reviews;
-    this.currentPage = 0;
     this.track = document.getElementById(containerId);
     this.prevBtn = document.getElementById("prevBtn");
     this.nextBtn = document.getElementById("nextBtn");
     this.dotsContainer = document.getElementById("carouselDots");
     this.itemsPerView = this.getItemsPerView();
+    // Calcular totalPages após ter itemsPerView
+    this.totalPagesOriginal = Math.ceil(reviews.length / this.itemsPerView);
+    // Começar do meio para ter tela preenchida de ambos os lados
+    this.currentPage = Math.floor(this.totalPagesOriginal / 2);
     this.isTransitioning = false;
 
     this.init();
   }
 
   getItemsPerView() {
-    if (window.innerWidth >= 1024) return 3;
-    if (window.innerWidth >= 768) return 2;
+    // Calcular antes de usar this.reviews
+    if (typeof window !== "undefined") {
+      if (window.innerWidth >= 1024) return 3;
+      if (window.innerWidth >= 768) return 2;
+    }
     return 1;
   }
 
   totalPages() {
     // Retornar o número de páginas baseado nos reviews originais
-    // Mas vamos trabalhar com os duplicados internamente
-    return Math.ceil(this.reviews.length / this.itemsPerView);
+    return (
+      this.totalPagesOriginal ||
+      Math.ceil(this.reviews.length / this.itemsPerView)
+    );
   }
 
   getTotalItems() {
@@ -466,21 +474,27 @@ class ReviewsCarousel {
     if (this.isTransitioning) return;
 
     this.currentPage--;
+    const totalPages = this.totalPages();
 
-    // Se voltou antes do início, ir para o final da primeira cópia
+    // Se voltou antes do início, ir para o final
     if (this.currentPage < 0) {
       this.isTransitioning = true;
-      // Remover transição temporariamente
-      const originalTransition = this.track.style.transition;
-      this.track.style.transition = "none";
-      this.currentPage = this.totalPages() - 1;
-      this.updateCarousel();
 
-      // Forçar reflow e restaurar transição
-      requestAnimationFrame(() => {
-        this.track.style.transition = originalTransition || "";
-        this.isTransitioning = false;
-      });
+      // Aguardar a transição CSS terminar (500ms conforme o CSS)
+      setTimeout(() => {
+        const originalTransition = this.track.style.transition;
+        this.track.style.transition = "none";
+        this.currentPage = totalPages - 1;
+        this.updateCarousel();
+
+        // Forçar reflow e restaurar transição no próximo frame
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.track.style.transition = originalTransition || "";
+            this.isTransitioning = false;
+          });
+        });
+      }, 550); // Aguardar transição CSS (500ms) + margem
     } else {
       this.updateCarousel();
     }
@@ -490,21 +504,29 @@ class ReviewsCarousel {
     if (this.isTransitioning) return;
 
     this.currentPage++;
+    const totalPages = this.totalPages();
 
-    // Se chegou no final da primeira cópia, resetar sem transição visível
-    if (this.currentPage >= this.totalPages()) {
+    // Se chegou no final, resetar para o início sem transição visível
+    // Como os cards estão duplicados, quando chega no final da primeira cópia,
+    // já está mostrando o início da segunda cópia, então podemos resetar invisivelmente
+    if (this.currentPage >= totalPages) {
       this.isTransitioning = true;
-      // Remover transição temporariamente
-      const originalTransition = this.track.style.transition;
-      this.track.style.transition = "none";
-      this.currentPage = 0;
-      this.updateCarousel();
 
-      // Forçar reflow e restaurar transição
-      requestAnimationFrame(() => {
-        this.track.style.transition = originalTransition || "";
-        this.isTransitioning = false;
-      });
+      // Aguardar a transição CSS terminar (500ms conforme o CSS)
+      setTimeout(() => {
+        const originalTransition = this.track.style.transition;
+        this.track.style.transition = "none";
+        this.currentPage = 0;
+        this.updateCarousel();
+
+        // Forçar reflow e restaurar transição no próximo frame
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.track.style.transition = originalTransition || "";
+            this.isTransitioning = false;
+          });
+        });
+      }, 550); // Aguardar transição CSS (500ms) + margem
     } else {
       this.updateCarousel();
     }
