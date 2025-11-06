@@ -68,12 +68,14 @@ export default async function handler(req, res) {
 
   try {
     // Buscar reviews do Google Places API
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews&key=${API_KEY}`;
+    // Incluindo mais campos para garantir que reviews sejam retornados
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews,user_ratings_total,formatted_address&key=${API_KEY}`;
 
     console.log("🔍 Chamando Google Places API");
+    console.log("Place ID completo:", PLACE_ID || "NÃO CONFIGURADO");
     console.log(
-      "Place ID:",
-      PLACE_ID ? `${PLACE_ID.substring(0, 20)}...` : "NÃO CONFIGURADO"
+      "Place ID (primeiros 30 chars):",
+      PLACE_ID ? `${PLACE_ID.substring(0, 30)}...` : "NÃO CONFIGURADO"
     );
 
     // Usar fetch nativo (Node.js 18+ tem fetch nativo no Vercel)
@@ -107,7 +109,51 @@ export default async function handler(req, res) {
       hasReviews: !!data.result?.reviews,
       reviewsCount: data.result?.reviews?.length || 0,
       placeName: data.result?.name || "N/A",
+      placeRating: data.result?.rating || "N/A",
+      totalReviews: data.result?.user_ratings_total || 0,
     });
+
+    // Log adicional para debug
+    if (data.result) {
+      console.log("📍 Local encontrado:", data.result.name);
+      console.log("📍 Endereço:", data.result.formatted_address || "N/A");
+      console.log("⭐ Avaliação média:", data.result.rating || "N/A");
+      console.log(
+        "📝 Total de avaliações no Google Maps:",
+        data.result.user_ratings_total || 0
+      );
+      console.log(
+        "📋 Reviews disponíveis via API:",
+        data.result.reviews?.length || 0
+      );
+
+      // Log detalhado das reviews se existirem
+      if (data.result.reviews && data.result.reviews.length > 0) {
+        console.log(
+          "📄 Primeiras 3 reviews:",
+          data.result.reviews.slice(0, 3).map((r) => ({
+            author: r.author_name,
+            rating: r.rating,
+            textPreview: r.text?.substring(0, 50) + "...",
+          }))
+        );
+      } else if (data.result.user_ratings_total > 0) {
+        console.warn(
+          "⚠️  ATENÇÃO: O local tem",
+          data.result.user_ratings_total,
+          "avaliações no Google Maps mas a API não retornou nenhuma review."
+        );
+        console.warn("   Possíveis causas:");
+        console.warn(
+          "   1. O Place ID não corresponde exatamente ao local no Google Maps"
+        );
+        console.warn(
+          "   2. As reviews são muito antigas e a API não as retorna"
+        );
+        console.warn("   3. Há um problema com os campos solicitados na API");
+        console.warn("   Place ID usado:", PLACE_ID);
+      }
+    }
 
     // Verificar se a resposta foi bem-sucedida
     if (data.status === "OK") {
