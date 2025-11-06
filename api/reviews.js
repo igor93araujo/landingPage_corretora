@@ -22,8 +22,10 @@ export default async function handler(req, res) {
   }
 
   // Ler variáveis de ambiente
-  const API_KEY = process.env.GOOGLE_PLACES_API_KEY;
-  const PLACE_ID = process.env.GOOGLE_PLACE_ID;
+  // Tenta os nomes novos primeiro (GOOGLE_PLACES_API_KEY, GOOGLE_PLACE_ID)
+  // Depois tenta os nomes antigos (API_KEY, PLACE_ID) para compatibilidade
+  const API_KEY = process.env.GOOGLE_PLACES_API_KEY || process.env.API_KEY;
+  const PLACE_ID = process.env.GOOGLE_PLACE_ID || process.env.PLACE_ID;
 
   // Debug: listar todas as variáveis de ambiente relacionadas
   const allEnvKeys = Object.keys(process.env);
@@ -55,7 +57,7 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: "API não configurada",
       message:
-        "GOOGLE_PLACES_API_KEY ou GOOGLE_PLACE_ID não configuradas no Vercel",
+        "API_KEY/GOOGLE_PLACES_API_KEY ou PLACE_ID/GOOGLE_PLACE_ID não configuradas no Vercel",
       debug: {
         hasApiKey: !!API_KEY,
         hasPlaceId: !!PLACE_ID,

@@ -13,8 +13,10 @@ const fs = require("fs");
 const path = require("path");
 
 // Ler variáveis de ambiente
-const API_KEY = process.env.GOOGLE_PLACES_API_KEY || "";
-const PLACE_ID = process.env.GOOGLE_PLACE_ID || "";
+// Tenta os nomes novos primeiro (GOOGLE_PLACES_API_KEY, GOOGLE_PLACE_ID)
+// Depois tenta os nomes antigos (API_KEY, PLACE_ID) para compatibilidade
+const API_KEY = process.env.GOOGLE_PLACES_API_KEY || process.env.API_KEY || "";
+const PLACE_ID = process.env.GOOGLE_PLACE_ID || process.env.PLACE_ID || "";
 
 // Criar objeto de configuração
 const GOOGLE_CONFIG = {
