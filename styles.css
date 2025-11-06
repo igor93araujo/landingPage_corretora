@@ -255,7 +255,7 @@ body {
   display: flex;
   align-items: center;
   gap: 3rem;
-  animation: scroll-logos 7s linear infinite;
+  animation: scroll-logos 15s linear infinite;
   will-change: transform;
   width: fit-content;
 }
@@ -1130,7 +1130,7 @@ body {
 
   .logos-carousel-track {
     gap: 2rem;
-    animation-duration: 7s;
+    animation-duration: 15s;
   }
 
   .footer-content {
