@@ -349,6 +349,7 @@ class ReviewsCarousel {
     this.nextBtn = document.getElementById("nextBtn");
     this.dotsContainer = document.getElementById("carouselDots");
     this.itemsPerView = this.getItemsPerView();
+    this.isTransitioning = false;
 
     this.init();
   }
@@ -360,7 +361,14 @@ class ReviewsCarousel {
   }
 
   totalPages() {
+    // Retornar o número de páginas baseado nos reviews originais
+    // Mas vamos trabalhar com os duplicados internamente
     return Math.ceil(this.reviews.length / this.itemsPerView);
+  }
+
+  getTotalItems() {
+    // Retornar o total de items duplicados
+    return this.reviews.length * 2;
   }
 
   init() {
@@ -394,8 +402,8 @@ class ReviewsCarousel {
       }
     });
 
-    // Auto-play (opcional - descomente se quiser)
-    // this.startAutoPlay();
+    // Auto-play com 1 segundo de pausa em cada card
+    this.startAutoPlay(1000);
 
     // Navegação por teclado
     document.addEventListener("keydown", (e) => {
@@ -417,7 +425,9 @@ class ReviewsCarousel {
   }
 
   renderCards() {
-    this.track.innerHTML = this.reviews
+    // Duplicar reviews para criar loop infinito contínuo
+    const duplicatedReviews = [...this.reviews, ...this.reviews];
+    this.track.innerHTML = duplicatedReviews
       .map((review, index) => createReviewCard(review, index))
       .join("");
   }
@@ -440,27 +450,62 @@ class ReviewsCarousel {
     const offset = -this.currentPage * 100;
     this.track.style.transform = `translateX(${offset}%)`;
 
-    // Atualizar dots
+    // Atualizar dots (baseado nos reviews originais)
     const dots = this.dotsContainer.querySelectorAll(".carousel-dot");
+    const dotIndex = this.currentPage % this.totalPages();
     dots.forEach((dot, index) => {
-      dot.classList.toggle("active", index === this.currentPage);
+      dot.classList.toggle("active", index === dotIndex);
     });
 
-    // Atualizar botões
-    this.prevBtn.disabled = this.currentPage === 0;
-    this.nextBtn.disabled = this.currentPage === this.totalPages() - 1;
+    // Atualizar botões (sempre habilitados para loop infinito)
+    this.prevBtn.disabled = false;
+    this.nextBtn.disabled = false;
   }
 
   prev() {
-    if (this.currentPage > 0) {
-      this.currentPage--;
+    if (this.isTransitioning) return;
+
+    this.currentPage--;
+
+    // Se voltou antes do início, ir para o final da primeira cópia
+    if (this.currentPage < 0) {
+      this.isTransitioning = true;
+      // Remover transição temporariamente
+      const originalTransition = this.track.style.transition;
+      this.track.style.transition = "none";
+      this.currentPage = this.totalPages() - 1;
+      this.updateCarousel();
+
+      // Forçar reflow e restaurar transição
+      requestAnimationFrame(() => {
+        this.track.style.transition = originalTransition || "";
+        this.isTransitioning = false;
+      });
+    } else {
       this.updateCarousel();
     }
   }
 
   next() {
-    if (this.currentPage < this.totalPages() - 1) {
-      this.currentPage++;
+    if (this.isTransitioning) return;
+
+    this.currentPage++;
+
+    // Se chegou no final da primeira cópia, resetar sem transição visível
+    if (this.currentPage >= this.totalPages()) {
+      this.isTransitioning = true;
+      // Remover transição temporariamente
+      const originalTransition = this.track.style.transition;
+      this.track.style.transition = "none";
+      this.currentPage = 0;
+      this.updateCarousel();
+
+      // Forçar reflow e restaurar transição
+      requestAnimationFrame(() => {
+        this.track.style.transition = originalTransition || "";
+        this.isTransitioning = false;
+      });
+    } else {
       this.updateCarousel();
     }
   }
@@ -472,10 +517,9 @@ class ReviewsCarousel {
     }
   }
 
-  startAutoPlay(interval = 5000) {
+  startAutoPlay(interval = 1000) {
     this.autoPlayInterval = setInterval(() => {
-      if (this.currentPage < this.totalPages() - 1) this.next();
-      else this.goTo(0);
+      this.next(); // Usa next() que já tem lógica de loop infinito
     }, interval);
   }
 
