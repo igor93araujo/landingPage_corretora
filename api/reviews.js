@@ -25,17 +25,42 @@ export default async function handler(req, res) {
   const API_KEY = process.env.GOOGLE_PLACES_API_KEY;
   const PLACE_ID = process.env.GOOGLE_PLACE_ID;
 
+  // Debug: listar todas as variáveis de ambiente relacionadas
+  const allEnvKeys = Object.keys(process.env);
+  const googleEnvKeys = allEnvKeys.filter(
+    (k) =>
+      k.toUpperCase().includes("GOOGLE") ||
+      k.toUpperCase().includes("PLACE") ||
+      k.toUpperCase().includes("API")
+  );
+
+  console.log("🔍 Debug - Variáveis de ambiente encontradas:");
+  console.log("Total de variáveis:", allEnvKeys.length);
+  console.log("Variáveis relacionadas a Google/Place/API:", googleEnvKeys);
+  console.log("GOOGLE_PLACES_API_KEY existe?", !!API_KEY);
+  console.log("GOOGLE_PLACE_ID existe?", !!PLACE_ID);
+  console.log("Valores:", {
+    API_KEY_length: API_KEY ? API_KEY.length : 0,
+    PLACE_ID_length: PLACE_ID ? PLACE_ID.length : 0,
+  });
+
   // Verificar se estão configuradas
   if (!API_KEY || !PLACE_ID) {
     console.error("❌ Variáveis de ambiente não configuradas:", {
       hasApiKey: !!API_KEY,
       hasPlaceId: !!PLACE_ID,
-      envKeys: Object.keys(process.env).filter((k) => k.includes("GOOGLE")),
+      envKeys: googleEnvKeys,
+      allEnvKeys: allEnvKeys.slice(0, 20), // Primeiras 20 para debug
     });
     return res.status(500).json({
       error: "API não configurada",
       message:
         "GOOGLE_PLACES_API_KEY ou GOOGLE_PLACE_ID não configuradas no Vercel",
+      debug: {
+        hasApiKey: !!API_KEY,
+        hasPlaceId: !!PLACE_ID,
+        relatedEnvKeys: googleEnvKeys,
+      },
     });
   }
 
