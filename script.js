@@ -301,48 +301,48 @@ window.addEventListener("resize", updateWhatsAppFloatingStyle);
 document.addEventListener("DOMContentLoaded", updateWhatsAppFloatingStyle);
 
 async function fetchGoogleReviews() {
-  if (
-    typeof GOOGLE_CONFIG === "undefined" ||
-    !GOOGLE_CONFIG.API_KEY ||
-    !GOOGLE_CONFIG.PLACE_ID
-  ) {
-    return { reviews: null, error: "API não configurada" };
+  // Detectar se está em desenvolvimento local
+  const isLocalDev =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "";
+
+  // Em desenvolvimento local, serverless function não está disponível
+  // Retorna erro silencioso para usar reviews de exemplo
+  if (isLocalDev) {
+    return {
+      reviews: null,
+      error: "Desenvolvimento local - usando reviews de exemplo",
+    };
   }
 
   try {
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${GOOGLE_CONFIG.PLACE_ID}&fields=name,rating,reviews&key=${GOOGLE_CONFIG.API_KEY}`
-    );
+    // Em produção (Vercel): usa serverless function
+    const response = await fetch("/api/reviews");
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        reviews: null,
+        error: errorData.error || `Erro HTTP ${response.status}`,
+      };
+    }
 
     const data = await response.json();
 
-    if (data.status === "OK" && data.result?.reviews?.length > 0) {
-      const reviews = data.result.reviews
-        .map((review) => ({
-          name: review.author_name || "Anônimo",
-          rating: review.rating,
-          text: review.text || "Avaliação sem texto",
-          date: review.time
-            ? new Date(review.time * 1000).toLocaleDateString("pt-BR", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })
-            : "Data não disponível",
-          initial: review.author_name
-            ? review.author_name.charAt(0).toUpperCase()
-            : "?",
-          photo: review.profile_photo_url || null,
-        }))
-        .filter((review) => review.rating >= 3)
-        .slice(0, 10);
-
-      return { reviews, error: null };
+    if (data.reviews && data.reviews.length > 0) {
+      return { reviews: data.reviews, error: null };
     }
 
-    return { reviews: null, error: "Não foi possível carregar avaliações" };
+    return {
+      reviews: null,
+      error: data.error || "Nenhuma avaliação encontrada",
+    };
   } catch (error) {
-    return { reviews: null, error: "Erro ao buscar avaliações" };
+    return {
+      reviews: null,
+      error: error.message || "Erro de conexão",
+    };
   }
 }
 
@@ -582,19 +582,53 @@ function hideGoogleErrorMessage() {
   }
 }
 
+// Reviews de exemplo (fallback)
+const exampleReviews = [
+  {
+    name: "Maria Silva",
+    rating: 5,
+    text: "Excelente atendimento! A equipe da REIBACK foi muito profissional e me ajudou a encontrar o seguro perfeito para minha necessidade. Super recomendo!",
+    date: "15 de Janeiro, 2025",
+    initial: "M",
+  },
+  {
+    name: "João Santos",
+    rating: 5,
+    text: "Atendimento impecável e rápido. Conseguiram as melhores condições do mercado para o seguro do meu veículo. Profissionais muito competentes!",
+    date: "12 de Janeiro, 2025",
+    initial: "J",
+  },
+  {
+    name: "Ana Costa",
+    rating: 5,
+    text: "Muito satisfeita com o serviço! A REIBACK realmente entende as necessidades do cliente e oferece soluções personalizadas. Nota 10!",
+    date: "10 de Janeiro, 2025",
+    initial: "A",
+  },
+];
+
 // Inicializar carrossel quando a página carregar
 document.addEventListener("DOMContentLoaded", async () => {
   hideGoogleErrorMessage();
 
+  const isLocalDev =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "";
+
   const googleData = await fetchGoogleReviews();
   const reviews = googleData.reviews || exampleReviews;
 
-  if (googleData.error || !googleData.reviews) {
+  // Mostrar mensagem de erro apenas em produção quando falhar
+  // Em desenvolvimento local, não mostra erro (usa reviews de exemplo silenciosamente)
+  if ((googleData.error || !googleData.reviews) && !isLocalDev) {
     showGoogleErrorMessage();
   }
 
   // Inicializar carrossel
-  if (reviews.length > 0) {
+  if (reviews && reviews.length > 0) {
     new ReviewsCarousel(reviews, "reviewsTrack");
+  } else {
+    console.error("❌ Nenhuma review disponível");
   }
 });
