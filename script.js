@@ -410,9 +410,6 @@ class ReviewsCarousel {
       }
     });
 
-    // Auto-play com 1 segundo de pausa em cada card
-    this.startAutoPlay(1000);
-
     // Navegação por teclado
     document.addEventListener("keydown", (e) => {
       if (
