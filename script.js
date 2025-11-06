@@ -330,10 +330,13 @@ async function fetchGoogleReviews() {
 
     const data = await response.json();
 
-    if (data.reviews && data.reviews.length > 0) {
-      return { reviews: data.reviews, error: null };
+    // Se há reviews (mesmo que seja array vazio), retornar
+    // Array vazio significa que não há reviews disponíveis, mas a API funcionou
+    if (Array.isArray(data.reviews)) {
+      return { reviews: data.reviews, error: data.error || null };
     }
 
+    // Se não há reviews no formato esperado, retornar erro
     return {
       reviews: null,
       error: data.error || "Nenhuma avaliação encontrada",
@@ -617,11 +620,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.hostname === "";
 
   const googleData = await fetchGoogleReviews();
-  const reviews = googleData.reviews || exampleReviews;
 
-  // Mostrar mensagem de erro apenas em produção quando falhar
+  // Se não há reviews do Google (null ou array vazio), usar reviews de exemplo
+  // Se googleData.reviews é um array vazio, significa que não há reviews disponíveis
+  // Se googleData.reviews é null, significa que houve erro
+  const reviews =
+    googleData.reviews && googleData.reviews.length > 0
+      ? googleData.reviews
+      : exampleReviews;
+
+  // Mostrar mensagem de erro apenas em produção quando falhar (não quando array vazio)
   // Em desenvolvimento local, não mostra erro (usa reviews de exemplo silenciosamente)
-  if ((googleData.error || !googleData.reviews) && !isLocalDev) {
+  if (googleData.error && !isLocalDev) {
     showGoogleErrorMessage();
   }
 

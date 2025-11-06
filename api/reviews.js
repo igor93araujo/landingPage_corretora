@@ -102,9 +102,26 @@ export default async function handler(req, res) {
       data.status,
       data.error_message || "OK"
     );
+    console.log("📊 Estrutura da resposta:", {
+      hasResult: !!data.result,
+      hasReviews: !!data.result?.reviews,
+      reviewsCount: data.result?.reviews?.length || 0,
+      placeName: data.result?.name || "N/A",
+    });
 
-    // Se sucesso, retornar reviews formatadas
-    if (data.status === "OK" && data.result?.reviews?.length > 0) {
+    // Verificar se a resposta foi bem-sucedida
+    if (data.status === "OK") {
+      // Verificar se há reviews
+      if (!data.result?.reviews || data.result.reviews.length === 0) {
+        console.warn("⚠️  Place encontrado mas sem reviews");
+        return res.status(200).json({
+          reviews: [],
+          error: null,
+          message: "Nenhuma avaliação disponível para este local",
+        });
+      }
+
+      // Processar reviews
       const reviews = data.result.reviews
         .map((review) => ({
           name: review.author_name || "Anônimo",
@@ -124,6 +141,15 @@ export default async function handler(req, res) {
         }))
         .filter((review) => review.rating >= 3)
         .slice(0, 10);
+
+      if (reviews.length === 0) {
+        console.warn("⚠️  Nenhuma review com 3+ estrelas após filtro");
+        return res.status(200).json({
+          reviews: [],
+          error: null,
+          message: "Nenhuma avaliação com 3 ou mais estrelas encontrada",
+        });
+      }
 
       console.log(`✅ ${reviews.length} reviews filtradas e formatadas`);
       return res.status(200).json({ reviews, error: null });
