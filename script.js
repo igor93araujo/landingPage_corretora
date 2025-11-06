@@ -326,14 +326,15 @@ function createReviewCard(review, index) {
         ${renderStars(review.rating)}
       </div>
       <div class="review-text">${review.text}</div>
-      <div class="review-google-badge">
+      <a 
+        href="https://www.google.com/maps/place/Reiback+Seguros+Campinas/@-22.9049853,-47.0983728,17z/data=!4m16!1m9!3m8!1s0x94c8d160203d5939:0x8ccded001fca26d1!2sReiback+Seguros+Campinas!8m2!3d-22.9049903!4d-47.0957925!9m1!1b1!16s%2Fg%2F11ngt3p3nx!3m5!1s0x94c8d160203d5939:0x8ccded001fca26d1!8m2!3d-22.9049903!4d-47.0957925!16s%2Fg%2F11ngt3p3nx?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="review-google-badge"
+      >
         <i class="fab fa-google"></i>
-        <span
-          href="https://www.google.com/maps/place/Reiback+Seguros+Campinas/@-22.9049853,-47.0983728,17z/data=!4m16!1m9!3m8!1s0x94c8d160203d5939:0x8ccded001fca26d1!2sReiback+Seguros+Campinas!8m2!3d-22.9049903!4d-47.0957925!9m1!1b1!16s%2Fg%2F11ngt3p3nx!3m5!1s0x94c8d160203d5939:0x8ccded001fca26d1!8m2!3d-22.9049903!4d-47.0957925!16s%2Fg%2F11ngt3p3nx?entry=ttu&g_ep=EgoyMDI1MTEwMi4wIKXMDSoASAFQAw%3D%3D"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Avaliação do Google</span>
-      </div>
+        <span>Avaliação do Google</span>
+      </a>
     </div>
   `;
 }

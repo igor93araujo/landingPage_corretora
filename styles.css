@@ -529,6 +529,16 @@ body {
   font-size: 0.85rem;
   color: #64748b;
   margin-top: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.review-google-badge:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .review-google-badge i {
