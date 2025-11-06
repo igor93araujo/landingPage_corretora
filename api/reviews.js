@@ -33,8 +33,31 @@ export default async function handler(req, res) {
     // Buscar reviews do Google Places API
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews&key=${API_KEY}`;
 
+    console.log(
+      "🔍 Chamando Google Places API:",
+      url.replace(API_KEY, "API_KEY_HIDDEN")
+    );
+
     const response = await fetch(url);
+
+    if (!response.ok) {
+      console.error(
+        "❌ Erro HTTP do Google:",
+        response.status,
+        response.statusText
+      );
+      return res.status(response.status).json({
+        reviews: null,
+        error: `Erro HTTP ${response.status}: ${response.statusText}`,
+      });
+    }
+
     const data = await response.json();
+    console.log(
+      "📥 Resposta do Google:",
+      data.status,
+      data.error_message || "OK"
+    );
 
     // Se sucesso, retornar reviews formatadas
     if (data.status === "OK" && data.result?.reviews?.length > 0) {
