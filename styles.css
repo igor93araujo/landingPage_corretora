@@ -257,6 +257,7 @@ body {
   gap: 3rem;
   animation: scroll-logos 7s linear infinite;
   will-change: transform;
+  width: fit-content;
 }
 
 .logos-carousel-item {
@@ -1129,7 +1130,7 @@ body {
 
   .logos-carousel-track {
     gap: 2rem;
-    animation-duration: 40s;
+    animation-duration: 7s;
   }
 
   .footer-content {
