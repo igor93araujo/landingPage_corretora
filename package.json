@@ -2,11 +2,7 @@
   "name": "landing-page-corretora",
   "version": "1.0.0",
   "description": "Landing Page da REIBACK Corretora de Seguros",
-  "scripts": {
-    "build": "node build.js",
-    "prebuild": "echo 'Iniciando build...'",
-    "postbuild": "echo 'Build concluído!'"
-  },
+  "scripts": {},
   "keywords": [
     "landing-page",
     "corretora",

@@ -300,55 +300,6 @@ window.addEventListener("scroll", updateWhatsAppFloatingStyle);
 window.addEventListener("resize", updateWhatsAppFloatingStyle);
 document.addEventListener("DOMContentLoaded", updateWhatsAppFloatingStyle);
 
-async function fetchGoogleReviews() {
-  // Detectar se está em desenvolvimento local
-  const isLocalDev =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "";
-
-  // Em desenvolvimento local, serverless function não está disponível
-  // Retorna erro silencioso para usar reviews de exemplo
-  if (isLocalDev) {
-    return {
-      reviews: null,
-      error: "Desenvolvimento local - usando reviews de exemplo",
-    };
-  }
-
-  try {
-    // Em produção (Vercel): usa serverless function
-    const response = await fetch("/api/reviews");
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      return {
-        reviews: null,
-        error: errorData.error || `Erro HTTP ${response.status}`,
-      };
-    }
-
-    const data = await response.json();
-
-    // Se há reviews (mesmo que seja array vazio), retornar
-    // Array vazio significa que não há reviews disponíveis, mas a API funcionou
-    if (Array.isArray(data.reviews)) {
-      return { reviews: data.reviews, error: data.error || null };
-    }
-
-    // Se não há reviews no formato esperado, retornar erro
-    return {
-      reviews: null,
-      error: data.error || "Nenhuma avaliação encontrada",
-    };
-  } catch (error) {
-    return {
-      reviews: null,
-      error: error.message || "Erro de conexão",
-    };
-  }
-}
-
 // Função para renderizar estrelas
 function renderStars(rating) {
   let starsHtml = "";
@@ -569,24 +520,8 @@ class ReviewsCarousel {
   }
 }
 
-// Função para mostrar mensagem de erro do Google
-function showGoogleErrorMessage() {
-  const errorMessage = document.getElementById("googleErrorMessage");
-  if (errorMessage) {
-    errorMessage.style.display = "block";
-  }
-}
-
-// Função para ocultar mensagem de erro do Google
-function hideGoogleErrorMessage() {
-  const errorMessage = document.getElementById("googleErrorMessage");
-  if (errorMessage) {
-    errorMessage.style.display = "none";
-  }
-}
-
-// Reviews de exemplo (fallback)
-const exampleReviews = [
+// Reviews de clientes
+const reviews = [
   {
     name: "Maria Silva",
     rating: 5,
@@ -611,31 +546,8 @@ const exampleReviews = [
 ];
 
 // Inicializar carrossel quando a página carregar
-document.addEventListener("DOMContentLoaded", async () => {
-  hideGoogleErrorMessage();
-
-  const isLocalDev =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "";
-
-  const googleData = await fetchGoogleReviews();
-
-  // Se não há reviews do Google (null ou array vazio), usar reviews de exemplo
-  // Se googleData.reviews é um array vazio, significa que não há reviews disponíveis
-  // Se googleData.reviews é null, significa que houve erro
-  const reviews =
-    googleData.reviews && googleData.reviews.length > 0
-      ? googleData.reviews
-      : exampleReviews;
-
-  // Mostrar mensagem de erro apenas em produção quando falhar (não quando array vazio)
-  // Em desenvolvimento local, não mostra erro (usa reviews de exemplo silenciosamente)
-  if (googleData.error && !isLocalDev) {
-    showGoogleErrorMessage();
-  }
-
-  // Inicializar carrossel
+document.addEventListener("DOMContentLoaded", () => {
+  // Inicializar carrossel com reviews
   if (reviews && reviews.length > 0) {
     new ReviewsCarousel(reviews, "reviewsTrack");
   } else {

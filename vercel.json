@@ -1,15 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
   "outputDirectory": ".",
   "framework": null,
-  "installCommand": "npm install --production=false",
-  "devCommand": null,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
