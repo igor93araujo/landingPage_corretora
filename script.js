@@ -300,20 +300,7 @@ window.addEventListener("scroll", updateWhatsAppFloatingStyle);
 window.addEventListener("resize", updateWhatsAppFloatingStyle);
 document.addEventListener("DOMContentLoaded", updateWhatsAppFloatingStyle);
 
-/**
- * FUNÇÃO PARA BUSCAR AVALIAÇÕES DO GOOGLE
- *
- * INSTRUÇÕES:
- * 1. Acesse: https://console.cloud.google.com/
- * 2. Crie um projeto ou selecione um existente
- * 3. Ative a "Places API" em "APIs e Serviços" > "Biblioteca"
- * 4. Crie uma API Key em "APIs e Serviços" > "Credenciais"
- * 5. Configure restrições de referenciadores HTTP para seu domínio
- * 6. Encontre o Place ID do seu negócio (veja GUIA_INTEGRACAO_GOOGLE.md)
- * 7. Substitua os valores abaixo:
- */
 async function fetchGoogleReviews() {
-  // Verificar se config.js foi carregado e está configurado
   if (
     typeof GOOGLE_CONFIG === "undefined" ||
     !GOOGLE_CONFIG.API_KEY ||
@@ -602,7 +589,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const googleData = await fetchGoogleReviews();
   const reviews = googleData.reviews || exampleReviews;
 
-  // Mostrar mensagem de erro se não conseguiu buscar do Google
   if (googleData.error || !googleData.reviews) {
     showGoogleErrorMessage();
   }
