@@ -318,7 +318,8 @@ async function fetchGoogleReviews() {
 
   try {
     // Em produção (Vercel): usa serverless function
-    const response = await fetch("/api/reviews");
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews&key=${API_KEY}`;
+    const response = await fetch(url);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

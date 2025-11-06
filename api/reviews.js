@@ -8,8 +8,13 @@
 export default async function handler(req, res) {
   // Permitir CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Handle preflight
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
   // Apenas GET permitido
   if (req.method !== "GET") {
@@ -22,6 +27,11 @@ export default async function handler(req, res) {
 
   // Verificar se estão configuradas
   if (!API_KEY || !PLACE_ID) {
+    console.error("❌ Variáveis de ambiente não configuradas:", {
+      hasApiKey: !!API_KEY,
+      hasPlaceId: !!PLACE_ID,
+      envKeys: Object.keys(process.env).filter((k) => k.includes("GOOGLE")),
+    });
     return res.status(500).json({
       error: "API não configurada",
       message:
@@ -33,12 +43,19 @@ export default async function handler(req, res) {
     // Buscar reviews do Google Places API
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews&key=${API_KEY}`;
 
+    console.log("🔍 Chamando Google Places API");
     console.log(
-      "🔍 Chamando Google Places API:",
-      url.replace(API_KEY, "API_KEY_HIDDEN")
+      "Place ID:",
+      PLACE_ID ? `${PLACE_ID.substring(0, 20)}...` : "NÃO CONFIGURADO"
     );
 
-    const response = await fetch(url);
+    // Usar fetch nativo (Node.js 18+ tem fetch nativo no Vercel)
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
     if (!response.ok) {
       console.error(
@@ -81,16 +98,19 @@ export default async function handler(req, res) {
         .filter((review) => review.rating >= 3)
         .slice(0, 10);
 
+      console.log(`✅ ${reviews.length} reviews filtradas e formatadas`);
       return res.status(200).json({ reviews, error: null });
     }
 
     // Erro da API do Google
+    console.error("❌ Erro da API do Google:", data.status, data.error_message);
     return res.status(400).json({
       reviews: null,
       error: data.error_message || `Status: ${data.status}`,
     });
   } catch (error) {
-    console.error("Erro ao buscar reviews:", error);
+    console.error("❌ Erro ao buscar reviews:", error);
+    console.error("Stack:", error.stack);
     return res.status(500).json({
       reviews: null,
       error: error.message || "Erro ao buscar avaliações",
